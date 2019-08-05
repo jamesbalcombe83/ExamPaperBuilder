@@ -51,7 +51,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
-        return redirect(url_for('main.user', user=current_user.name))
+        return redirect(url_for('main.user', user=current_user.username))
     return render_template('auth/register.html', title='Register', form=form)
 
 #Requesting a password reset
