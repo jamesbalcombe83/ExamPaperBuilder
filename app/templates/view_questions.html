@@ -1,0 +1,28 @@
+<!-- makes use of the base template with extends-->
+{% extends "template.html" %}
+
+<!-- tells jinja where the content should go into the template -->
+{% block app_content %}
+    <h1>Your Questions</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Exam Board</th>
+                <th scope="col">Question body</th>
+                <th scope="col">Marks</th>
+                <th scope="col">Answer</th>
+            </tr>
+
+        </thead>
+        {% for question in questions %}
+            <tr>
+                {% include 'includes/_question.html' %}
+                <td><a href="{{ url_for('main.edit_question', question_id=question.id) }} ">
+                        <input class="btn btn-primary" type="submit" value="Edit Question"></a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% include 'includes/_paginate.html' %}    
+    
+{% endblock %}

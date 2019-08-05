@@ -1,0 +1,33 @@
+<!-- makes use of the base template with extends-->
+{% extends "template.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+    <div class="container-fluid">
+    <h3>Available questions</h3>
+    <table class="table">     
+        {% for question in questions %}
+            <tr>
+                {% include 'includes/_question.html' %}
+                <td><a href="{{ url_for('main.edit_paper', 
+                    question_id=question.id, paper_id=paper.id) }} ">
+                    <input class="btn btn-primary" type="submit" value="Add to Paper"></a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h3>Questions in Paper</h3>
+    <table class="table">
+        {% for question in used_qs %}
+            <tr>
+                {% include 'includes/_question.html' %}
+                <td><a href="{{ url_for('main.edit_paper', 
+                    question_id=question.id, paper_id=paper.id) }} ">
+                    <input class="btn btn-primary" type="submit" value="Remove from Paper"></a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,25 @@
+<!-- makes use of the base template with extends-->
+{% extends "template.html" %}
+
+<!-- tells jinja where the content should go into the template -->
+{% block app_content %}
+    <h1>Your Papers</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Paper name</th>
+                <th scope="col"></th>
+            </tr>
+
+        </thead>
+        {% for paper in papers %}
+        <tr>
+            {% include 'includes/_paper.html' %}
+            <td><a href="{{ url_for('main.edit_paper', paper_id=paper.id) }} ">
+                    <input class="btn btn-primary" type="submit" value="Edit Paper"></a>
+            </td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% include 'includes/_paginate.html' %}    
+{% endblock %}
