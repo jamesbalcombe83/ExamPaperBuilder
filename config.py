@@ -11,8 +11,11 @@ class Config(object):
         'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
+
+
     #questions per page
-    QUESTIONS_PER_PAGE = 3
+    QUESTIONS_PER_PAGE = 20
 
     # for emails
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
