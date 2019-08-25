@@ -10,11 +10,11 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
-
+from flask_ckeditor import CKEditor
 
 #this is only for the initalisation of elements of the app
 #prepare db
-db = SQLAlchemy()
+db = SQLAlchemy(session_options={"autoflush": False})
 migrate = Migrate()
 #prepare login
 login = LoginManager()
@@ -25,6 +25,8 @@ login.login_message = ('Please log in to access this page')
 bootstrap = Bootstrap()
 #for better time
 moment = Moment()
+#for better text editing
+ckeditor = CKEditor()
 
 def create_app(config_class=Config):
     #prepare flask
@@ -32,6 +34,7 @@ def create_app(config_class=Config):
     app.config.from_object(Config)
     app.config["DEBUG"] = True
 
+    ckeditor.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
     login.init_app(app)
@@ -39,6 +42,7 @@ def create_app(config_class=Config):
     bootstrap.init_app(app)
     moment.init_app(app)
     
+
     from app.errors import bp as errors_bp
     app.register_blueprint(errors_bp)
 
@@ -47,6 +51,9 @@ def create_app(config_class=Config):
 
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
+
+    from app.api import bp as api_bp
+    app.register_blueprint(api_bp, url_prefix='/api')
 
     #Only send errors if not in debug mode
     if not app.debug:
@@ -82,7 +89,8 @@ def create_app(config_class=Config):
 
         app.logger.setLevel(logging.INFO)
         app.logger.info('ExamPaperBuilder startup')
-    
+    #serve(app, listen='*:5000')
+
     return app
 
 from app import models

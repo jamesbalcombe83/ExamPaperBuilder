@@ -1,1 +1,1 @@
-web: flask db upgrade; flask compile; gunicorn exampaperbuilder:app
+web: flask db upgrade; flask ; gunicorn exampaperbuilder:app
