@@ -82,11 +82,9 @@ def run_migrations_online():
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
-            render_as_batch=config.get_main_option('sqlalchemy.url').startswith('sqlite:///')
-                )
-            #process_revision_directives=process_revision_directives,
-            #**current_app.extensions['migrate'].configure_args
-        #)
+            process_revision_directives=process_revision_directives,
+            **current_app.extensions['migrate'].configure_args
+        )
 
         with context.begin_transaction():
             context.run_migrations()
