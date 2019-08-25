@@ -1,6 +1,10 @@
 {% extends "template.html" %}
 
 {% block app_content %}
+    {% set delete_message = "Warning deleting your will result in it's permenant removal. You have created
+    will be removed. Any questions will remain, but you will be removed as the author. Are you sure 
+    you want to proceed?" %}
+
     <table class="table">
         <tr>
             <td width="256px"><img src="{{ user.avatar(128) }}" ></td>
@@ -11,7 +15,16 @@
                 {% endif %}
                 <p>Last seen: {{ moment(user.last_seen).calendar() }}</p>
                 {% if user == current_user %}
-                    <p><a href="{{ url_for('main.edit_profile', username=current_user.username) }}">Edit your profile</a></p>
+                    <a href="{{ url_for('main.edit_profile', username=current_user.username) }}">
+                        <input class="btn btn-primary" type="submit" value="Edit Profile">
+                    </a>
+                    {{ render_modal(user.id, "Delete User",
+                     delete_message, url_for('main.delete_user', id=current_user.id, method=DELETE )) }}
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#id{{user.id}}">
+                        Delete
+                    </button> 
+
+                    
                 {% endif %}
             </td>
         </tr>

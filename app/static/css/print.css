@@ -1,0 +1,239 @@
+/**
+ * Print stylesheet for yourwebsite.com
+* @version         1.0
+* @lastmodified    16.06.2016
+*/
+
+page[size="A4"] {
+  background: white;
+  width: 21cm;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 0.5cm;
+}
+
+@media all {
+
+  .namebox {
+    border : 1px solid #000000;
+    font-size : 14pt;
+    padding : 7px;
+  }
+
+  body {
+    font: 12pt Arial, Helvetica, sans-serif !important;
+    background: #fff !important;
+    color: #000;
+  }
+  .align-top {
+    vertical-align: baseline;
+  }
+  .align-bottom {
+    vertical-align: bottom;
+  }
+  .marks {
+    font-size : 14pt;
+  }
+  hr {
+    border : 1px solid  black;
+  }
+}
+
+@media print {
+
+  @page {
+    size: A4;
+  }
+
+  @page :left {
+    margin-left: 1cm !important;
+  }
+
+  @page :right {
+    margin: 1cm;
+  }
+
+  @page {
+    @bottom-right {
+      content: counter(page);
+    }
+  }
+  .rules {
+    page-break-after: always;
+  }
+
+  header { display: none; }
+
+  tr, img {
+    page-break-inside: avoid;
+  }
+      
+}
+
+/*
+@media print {
+    Your notes
+    
+    .list-group {
+        white-space: nowrap;
+        display: block !important;
+    }
+    list-group-item {
+        white-space: nowrap;
+        page-break-inside: avoid; 
+    }
+
+    *,
+    *::before,
+    *::after {
+      text-shadow: none !important;
+      box-shadow: none !important;
+    }
+
+    a:not(.btn) {
+      text-decoration: underline;
+    }
+
+    abbr[title]::after {
+      content: " (" attr(title) ")";
+    }
+
+    pre {
+      white-space: pre-wrap !important;
+    }
+
+    pre, blockquote {
+      border: 1px solid #adb5bd;
+      page-break-inside: avoid;
+    }
+
+    thead {
+      display: table-header-group;
+    }
+    
+    tr, img {
+      page-break-inside: avoid;
+    }
+
+    p, h2, h3 {
+      orphans: 3;
+      widows: 3;
+    }
+
+    h2, h3 {
+      page-break-after: avoid;
+    }
+
+    body {
+
+    }
+    .container {
+    
+    }
+    .navbar {
+      display: none;
+    }
+    .badge {
+
+    }
+    .table {
+      border-collapse: collapse !important;
+    }
+    .table td,
+    .table th {
+      background-color: #fff !important;
+    }
+    .table-bordered th,
+    .table-bordered td {
+      border: 1px solid #dee2e6 !important;
+    }
+
+    .table-dark {
+    
+    }
+    .table-dark th,
+    .table-dark td,
+    .table-dark thead th,
+    .table-dark tbody + tbody {
+      border-color: #dee2e6;
+    }
+    .table .thead-dark th {
+      border-color: #dee2e6;
+    }
+
+    #content,#page {
+        width: 100%; 
+        float: none;
+    }
+
+    @page { margin: 5cm !important;
+    }
+
+    @page { size: A4; 
+    }
+
+    footer {
+        position: center;
+    }
+
+    @page:footer {
+        
+    }
+
+    h1 {
+        font-size: 24pt;
+    }
+            
+    h2, h3, h4 {
+        font-size: 24pt;
+        margin-top: 0px;
+    }
+
+    a {
+        page-break-inside:avoid
+    }
+
+    p {
+        page-break-inside: avoid !important;
+        page-break-after:avoid !important;
+        page-break-before:avoid !important;
+    }
+
+    blockquote {
+        page-break-inside: avoid;
+    }
+
+    h1, h2, h3, h4, h5, h6 { 
+        page-break-after:avoid; 
+        page-break-inside:avoid 
+    }
+
+    p1 { 
+        page-break-after: always;
+    }
+
+    p {
+        page-break-inside: avoid !important;
+        page-break-after:avoid !important;
+        page-break-before:avoid !important;
+    }
+
+    img { 
+        page-break-inside:avoid; 
+        page-break-after:avoid; 
+    }
+
+    table, pre { 
+        page-break-inside:avoid 
+    }
+
+    ul, ol, dl, li {
+        display : block; 
+        white-space: nowrap;
+        page-break-before:avoid !important;
+        page-break-inside: avoid !important;
+        page-break-after:avoid !important;
+    }
+
+}
+*/

@@ -3,12 +3,26 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-    <h1>Create a Paper</h1>
-    <div class="row">
-        <div class="col-md-4">
-            {{ wtf.quick_form(form) }}
-        </div>
-    </div>
+    <h3>Create a Paper</h3>
     
+    <form method=post>
+        {{form.hidden_tag()}}
+        
+
+        {{ render_field(form.name, class="form-control") }}
+        {{ render_field(form.exam_level, class_="form-control") }}
+        {{ render_field(form.subject, class_="form-control") }}
+        {{ render_field(form.duration, class_="form-control") }}
+        {{ render_field(form.date, class_="form-control") }}
+        {{ render_field(form.rules, class_="ckeditor", id="rules") }}
+
+        <br>
+        <input type="submit", class="btn btn-success" value="Submit">
+        <input type="submit", name="cancel", class="btn btn-secondary" value="Cancel">
+    </form>
+
+    <script type="text/javascript">
+        CKEDITOR.replace('rules')
+    </script>
 
 {% endblock %}
