@@ -81,7 +81,7 @@ class QuestionForm(FlaskForm):
 
 class ExamBoardForm(FlaskForm):
     name = StringField('Exam board name', validators=[MyInputRequired()])
-    eb_submit = SubmitField('Submit')
+    submit = SubmitField('Submit')
 
 class ExamLevelForm(FlaskForm):
     name = StringField('Exam level', validators=[MyInputRequired()])
