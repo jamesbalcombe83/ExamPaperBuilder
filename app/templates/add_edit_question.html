@@ -32,8 +32,8 @@
                 <a id="add_el" class="form-control btn-primary" href="{{ url_for('main.add_exam_level', path='edit_question', question_id=question_id) }} ">
                     Add Exam Level</a>
                 {% else %}
-                    <a id="add_el" class="form-control btn-primary" href="{{ url_for('main.add_exam_board', path='add_question') }} ">
-                        Add Exam Board</a>
+                    <a id="add_el" class="form-control btn-primary" href="{{ url_for('main.add_exam_level', path='add_question') }} ">
+                        Add Exam Level</a>
                 {% endif %}
             </div>
         </div>
