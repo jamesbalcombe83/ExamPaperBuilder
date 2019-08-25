@@ -4,8 +4,11 @@
 
 {% block app_content %}
     <h3>{{ title }}</h3>
-    {{ render_field(form.name, class="form-control") }}
-    <br>
-    <input type="submit", class="btn btn-success" value="Submit">
-    <a href="{{url_for('main.'+path, question_id=question_id)}}"><button class="btn btn-secondary">Cancel</button></a>
+    <form method="POST">
+        {{form.hidden_tag()}}
+        {{ render_field(form.name, class="form-control") }}
+        <br>
+        <input type="submit", class="btn btn-success" value="Submit">
+        <input type="submit", name="cancel", class="btn btn-secondary" value="Cancel">
+    </form>
 {% endblock %}

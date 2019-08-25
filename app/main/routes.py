@@ -321,6 +321,8 @@ def add_exam_level(path, question_id=None):
         db.session.commit()
         flash("Exam Level has been added", 'success')
         return redirect(url_for('main.'+path, question_id=question_id))
+    if "cancel" in request.form:
+        return redirect(url_for('main.'+path, question_id=question_id))
     
     return render_template("add_exam_level.html", title="Add Exam Level", form=form,\
         path=path, question_id=question_id)
@@ -331,12 +333,16 @@ def add_exam_level(path, question_id=None):
 @login_required #using flask-login to require a login to view
 def add_exam_board(path, question_id=None):
     form = ExamBoardForm()
-    current_app.logger.info(path)
+    current_app.logger.info(form.validate_on_submit())
+
     if form.validate_on_submit():
         exam_board = Exam_Boards(name=form.name.data)
         db.session.add(exam_board)
         db.session.commit()
         flash("Exam Board has been added", 'success')
         return redirect(url_for('main.'+path, question_id=question_id))
+    if "cancel" in request.form:
+        return redirect(url_for('main.'+path, question_id=question_id))
+
     return render_template("add_exam_board.html", title="Add Exam Board", path=path,\
         question_id=question_id, form=form)
