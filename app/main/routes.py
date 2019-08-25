@@ -82,6 +82,8 @@ def create_paper():
         db.session.commit()
         flash('The paper was created. Please add questions', 'success')
         return redirect(url_for('main.edit_paper', paper_id=paper.id))
+    if "cancel" in request.form:
+        return redirect(url_for('main.index'))
     return render_template('create_paper.html', title='Create Paper', form=form)
 
 #view all papers and edit
