@@ -5,7 +5,6 @@ from wtforms import Field, StringField, PasswordField, BooleanField, SubmitField
 from wtforms.fields.html5 import DateField
 from wtforms.validators import ValidationError, InputRequired, Email, EqualTo, Length, NumberRange
 from wtforms.widgets import TextInput
-from flask_ckeditor import CKEditorField
 from app.models import User
 
 class MyInputRequired(InputRequired):
@@ -73,7 +72,7 @@ class QuestionForm(FlaskForm):
         ('7', 'Jul'),('8', 'Aug'),('9', 'Sept'),('10', 'Oct'),('11', 'Nov'),('12', 'Dec'),])
     body = TextAreaField('Question body', validators=[MyInputRequired()])
     answer_space = BooleanField('Generate space for question answer automatically?',default=False)
-    answer = CKEditorField('Answer body', validators=[MyInputRequired()])
+    answer = TextAreaField('Answer body', validators=[MyInputRequired()])
     marks = IntegerField('Enter the number of marks', validators=[MyInputRequired()])
     tags = TagListField('Provide tags to identify the question')
 
