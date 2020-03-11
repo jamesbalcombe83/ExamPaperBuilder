@@ -14,7 +14,7 @@ class EditProfileForm(FlaskForm):
     username = StringField('Username', validators=[MyInputRequired()])
     name = StringField('Name', validators=[MyInputRequired()])
     email = StringField('Email', validators=[MyInputRequired(), Email()])
-    school_name = StringField('School_name', validators=[MyInputRequired(), Length(min=1, max=150)])
+    school_name = StringField('School name', validators=[MyInputRequired(), Length(min=1, max=150)])
     submit = SubmitField('Submit')
 
     #overloaded constructor for when the username didn't change
