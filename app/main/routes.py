@@ -36,6 +36,13 @@ def user(username):
 def edit_profile(username):
     form = EditProfileForm(current_user.username)
     #when a POST is sent, submit to check
+    if request.method == 'GET':
+        form.username.data = current_user.username
+        form.name.data = current_user.name
+        form.email.data = current_user.email
+        form.school_name.data = current_user.school_name
+    if "cancel" in request.form:
+        return redirect(url_for('main.user',username=current_user.username))
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.name = form.name.data
@@ -45,11 +52,8 @@ def edit_profile(username):
         flash('Your changes have been saved.', 'success')
         return redirect(url_for('main.user',username=current_user.username))
     #when the form loads - GET, grab the data
-    elif request.method == 'GET':
-        form.username.data = current_user.username
-        form.name.data = current_user.name
-        form.email.data = current_user.email
-        form.school_name.data = current_user.school_name
+    if "cancel" in request.form:
+        return redirect(url_for('main.user',username=current_user.username))
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form)
 
