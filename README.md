@@ -2,6 +2,8 @@
 
 ## A tool to help teachers construct examination style papers from a library of questions
 
+View live on [Heroku](https://exampaperbuilder.herokuapp.com/)
+
 ## Features
 
 - Account creation and secure signin
