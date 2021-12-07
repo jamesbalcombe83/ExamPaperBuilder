@@ -15,6 +15,8 @@ View live on [Heroku](https://exampaperbuilder.herokuapp.com/)
 
 ## Future Features
 
-- image upload
-- sharing questions between accounts
-- public database for shared questions
+- Track question usage by date and paper
+- Produce mark scheme
+- Image upload
+- Sharing questions between accounts
+- Public database for shared questions
