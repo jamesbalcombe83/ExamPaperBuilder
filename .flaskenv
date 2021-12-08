@@ -1,1 +1,2 @@
-FLASK_APP=testing.py
+FLASK_APP=exampaperbuilder.py
+FLASK_ENV=development

@@ -13,7 +13,7 @@ class Config(object):
 
     LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
 
-
+    #SERVER_NAME = os.environ.get('SERVER_NAME')
     #questions per page
     QUESTIONS_PER_PAGE = 20
 

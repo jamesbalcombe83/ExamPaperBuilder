@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="/static/css/print.css" type="text/css" media="all">
+    <meta charset="utf-8">
+    {{ moment.include_jquery() }}
+    {{ moment.include_moment() }}
+</head>
+<page size="A4">
+<body class="A4">
+
+        
+
+{% block app_content %}
+{% set lines = "........................................................................................................................................................." %}
+    <div class="container"  style="border-block: True">
+        <div class="namebox">
+           Name:
+        </div>
+        <br>
+        <h1>{{title}}</h1>
+        <hr>
+        <h2>{{ moment(paper.date).format("dddd, MMMM Do YYYY") }}</h2>
+        <h3>Duration: {{paper.duration}} minutes</h3>
+        <p class="marks">Total of <b>{{paper.total_marks}}</b> marks available</p>
+        <hr>
+        <div class="rules">
+            {{paper.rules |safe}}
+        </div>
+    <table id="paperview">
+        <tbody>
+            {% set qno = 1 %}
+            {% for question in used_qs %}
+                {% set index = positions.index(question.id) %}
+                    <tr id="{{question.id}}" pos="{{index}}">
+                        <td style="width: 3.0%" class="align-top">{{loop.index}}</td>
+                        <td style="width: 70.0%" class="align-top">{{ question.body | safe }}
+                            {% if question.answer_space == true %}
+                                {% for n in range(question.marks+1) %}
+                                    {{lines}} <br>
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                        <td style="width: 10.0%" class="align-bottom">[{{ question.marks }}]</td>
+                    </tr>
+                </tr>
+                {% set qno = qno + 1 %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+<footer>
+    
+</footer>
+
+{% endblock %}
+</body>
+</page>

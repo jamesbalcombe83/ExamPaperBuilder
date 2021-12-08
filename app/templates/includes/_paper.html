@@ -1,3 +1,4 @@
-<td>
-    {{ paper.name }}
-</td>
+<td>{{ paper.name }}</td>
+<td>{{ paper.subject }}</td>
+<td>{{ paper.examlevel.name }}</td>
+<td>{{ moment(paper.date_created).calendar() }}</td>
