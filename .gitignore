@@ -3,3 +3,6 @@ __pycache__
 venv
 app.db
 microblog.log*.env 
+.env
+.flaskenv
+.*
