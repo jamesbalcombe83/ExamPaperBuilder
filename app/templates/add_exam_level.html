@@ -8,8 +8,7 @@
         {{form.hidden_tag()}}
         {{ render_field(form.name, class="form-control") }}
         <br>
-        {{ wtf.form_field(form.submit, class="btn btn-success")}}
+        <input type="submit", class="btn btn-success" value="Submit">
         <input type="submit", name="cancel", class="btn btn-secondary" value="Cancel">
     </form>
-    
 {% endblock %}

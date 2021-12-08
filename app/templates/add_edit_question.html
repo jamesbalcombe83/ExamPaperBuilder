@@ -1,0 +1,80 @@
+<!-- makes use of the base template with extends-->
+{% extends "template.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+
+    <h3>{{ title }}</h3>
+
+    <form method=post>
+        {{form.hidden_tag()}}
+        
+        <div class="form form-row">
+            <div class="col">{{ render_field(form.exam_board, class_="form-control") }}</div>
+            <div class="col">
+                <label for="add_eb">Missing an Exam Board?</label>
+                {% if path=="edit_question" %}
+                <a id="add_eb" class="form-control btn-primary" href="{{ url_for('main.add_exam_board', path='edit_question', question_id=question_id) }} ">
+                    Add Exam Board</a>
+                {% else %}
+                <a id="add_eb" class="form-control btn-primary" href="{{ url_for('main.add_exam_board', path='add_question') }} ">
+                        Add Exam Board</a>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="form form-row">
+            <div class="col">{{ render_field(form.exam_level, class_="form-control") }}</div>
+            <div class="col">
+                <label for="add_el">Missing an Exam Level?</label>
+                {% if path=="edit_question" %}
+
+                <a id="add_el" class="form-control btn-primary" href="{{ url_for('main.add_exam_level', path='edit_question', question_id=question_id) }} ">
+                    Add Exam Level</a>
+                {% else %}
+                    <a id="add_el" class="form-control btn-primary" href="{{ url_for('main.add_exam_level', path='add_question') }} ">
+                        Add Exam Level</a>
+                {% endif %}
+            </div>
+        </div>
+
+        {{ render_field(form.exam_year, class="form-control") }}
+        {{ render_field(form.exam_session, class_="form-control") }}
+        {{ render_field(form.tags, class_="", id="tags") }}
+        {{ render_field(form.body, class_="textarea", id="editor") }}
+        {{ render_field(form.answer_space, class="") }}
+        <br>
+        {{ render_field(form.answer, class_="textarea", id="editor") }}
+        {{ render_field(form.marks, class_="form-control") }}
+
+        <br>
+        <input type="submit", class="btn btn-success" value="Submit">
+        <input type="submit", name="cancel", class="btn btn-secondary" value="Cancel">
+    </form>
+    
+    <script type="text/javascript">
+        ClassicEditor
+            var allEditors = document.querySelectorAll('#editor');
+            for (var i = 0; i < allEditors.length; ++i) {
+                ClassicEditor.create(allEditors[i]);
+            }
+           
+    </script>
+   
+    <script class="show">
+        $(function() {
+            $('#tags').selectize({
+                delimiter: ',',
+                persist: false,
+                create : function(input) {
+                    return {
+                        value: input,
+                        text: input
+                    }
+                }
+            });
+        });
+    </script>
+
+
+{% endblock %}

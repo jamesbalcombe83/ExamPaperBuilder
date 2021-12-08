@@ -3,12 +3,24 @@
 
 <!-- tells jinja where the content should go into the template -->
 {% block app_content %}
-    <h1>Your Papers</h1>
-    <table class="table">
+
+    {% set delete_message = "Warning deleting a paper will result in it's permenant removal. \
+     This may affect other users. Are you sure you want to proceed?" %}
+
+    <h3>Your Papers</h3>
+    <table 
+        id="table"
+        class="table"
+    >
         <thead>
             <tr>
                 <th scope="col">Paper name</th>
-                <th scope="col"></th>
+                <th scope="col">Subject</th>
+                <th scope="col">Level</th>
+                <th scope="col">Created on</th>
+                <th></th>
+                <th></th>
+                <th></th>
             </tr>
 
         </thead>
@@ -18,8 +30,38 @@
             <td><a href="{{ url_for('main.edit_paper', paper_id=paper.id) }} ">
                     <input class="btn btn-primary" type="submit" value="Edit Paper"></a>
             </td>
-            </tr>
+            <td><a href="{{ url_for('main.paper_generator', paper_id=paper.id) }} " target="_blank" rel="noopener noreferrer">
+                    <input class="btn btn-success" type="submit" value="Generate Paper"></a>
+            </td>
+            <td>
+                {{ render_modal(paper.id, "Delete Paper", 
+                delete_message, url_for('main.delete_paper', paper_id=paper.id) ) }}
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#id{{paper.id}}">
+                    Delete
+                </button> 
+            </td>
+
+        </tr>
         {% endfor %}
     </table>
-    {% include 'includes/_paginate.html' %}    
+
+    <script>
+        $(document).ready(function() {
+            $('#table').DataTable( {
+                scrollY: '70vh',
+                scrollCollapse: true,
+                scroller: { rowHeight: 30},
+                "info": false,
+                fixedColumns : {
+                    heightMatch: 'auto'
+                },
+                "columnDefs": [
+                    {"orderable":false, "targets": [4,5,6] }
+                ]
+            });
+        } );
+    </script>
+
+
+
 {% endblock %}

@@ -1,60 +1,93 @@
+<!DOCTYPE html>
 <!-- the basic page layout -->
+{% from "includes/_modals.html" import render_modal %}
+{% from 'includes/_formhelpers.html' import render_field %}
 
-{% extends 'bootstrap/base.html' %}
+<head>
+    <meta charset="utf-8">
+    <style> 
+        tr { height: 10px !important;}
+        tbody td img { max-height: 100px !important;
+        max-width: 100px !important;}
+      </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
 
-{% block scripts %}
-  {{ super() }}
-  {{ moment.include_moment() }}
-{% endblock %}
-
-{% block title%}
-  {% if title %}{{title }} - Exam Paper Builder{% else %}Welcome to Exam Paper Builder{% endif %}
-{% endblock %}
-      
-{% block navbar %}
-  <nav class="navbar navbar-default">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" 
-        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="{{ url_for('main.index') }}">Exam Paper Builder</a>
-      </div>
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav navbar-right">
-          <!-- flask-login for when there isnt a logged in user-->
-          {% if current_user.is_anonymous %}
-            <li><a href="{{ url_for('auth.register') }}">Register</a></li>
-            <li><a href="{{ url_for('auth.login') }}">Login</a></li>
-          {% else %}
-            <li><a href="{{ url_for('main.create_paper') }}">Create a new Paper</a></li>
-            <li><a href="{{ url_for('main.add_question') }}">Add Question</a></li>
-            <li><a href="{{ url_for('main.view_papers') }}">View Your Papers</a></li>
-            <li><a href="{{ url_for('main.view_questions') }}">View Your Questions</a></li>
-            <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li>
-            <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
-          {% endif %}
-        </ul>
-      </div>
-    </div>
-  </nav>
-{% endblock %}
+    <script src="https://cdn.ckeditor.com/ckeditor5/12.3.1/classic/ckeditor.js">
+      import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript';
+      import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript';
+    </script>
     
-{% block content %}
-  <div class="container">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-info" role="alert">{{message}}</div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
+    {{ moment.include_jquery() }}
+    {{ moment.include_moment() }}
 
-{# application content needs to be provided in the app_content block #}
-{% block app_content %}{% endblock %}
-</div>
-{% endblock %}
+</head>
+
+<body>
+
+  {% block navbar %}
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+        <a class="navbar-brand" href="{{ url_for('main.index') }}">Exam Paper Builder</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          {% if current_user.is_anonymous %}
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.register') }}">Register</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.login') }}">Login</a></li>
+            </ul>
+          {% else %}
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('main.create_paper') }}">Create a new Paper</a></li>
+              <li class="nav-item" ><a class="nav-link" href="{{ url_for('main.add_question') }}">Create a new Question</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('main.view_papers') }}">View Your Papers</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('main.view_questions') }}">View Your Questions</a></li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a></li>
+            </ul>
+          {% endif %}
+          
+        </div>
+      </nav>
+  {% endblock %}
+    
+  {% block content %}
+    <div class="container-fluid">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      
+      <!--messages with render-->
+      {% if error %}
+        <div class="alert alert-danger">{{error}}</div>
+      {% endif %}
+      
+      {% if msg %}
+        <div class="alert alert-success">{{msg}}</div>
+      {% endif %}
+
+    {# application content needs to be provided in the app_content block #}
+    {% block app_content %}{% endblock %}
+    </div>
+  {% endblock %}
+
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/js/standalone/selectize.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+
+</body>

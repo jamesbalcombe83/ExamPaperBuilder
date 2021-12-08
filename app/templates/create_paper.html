@@ -3,12 +3,47 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-    <h1>Create a Paper</h1>
-    <div class="row">
-        <div class="col-md-4">
-            {{ wtf.quick_form(form) }}
-        </div>
-    </div>
+    <h3>Create a Paper</h3>
     
+    <form method=post>
+        {{form.hidden_tag()}}
+        
+
+        {{ render_field(form.name, class="form-control") }}
+        
+        <div class="form form-row">
+                <div class="col">{{ render_field(form.exam_level, class_="form-control") }}</div>
+                <div class="col">
+                    <label for="add_el">Missing an Exam Level?</label>
+                    {% if path=="edit_question" %}
+    
+                    <a id="add_el" class="form-control btn-primary" href="{{ url_for('main.add_exam_level', path='edit_paper', paper_id=paper_id) }} ">
+                        Add Exam Level</a>
+                    {% else %}
+                        <a id="add_el" class="form-control btn-primary" href="{{ url_for('main.add_exam_level', path='create_paper') }} ">
+                            Add Exam Level</a>
+                    {% endif %}
+                </div>
+            </div>
+
+
+        {{ render_field(form.subject, class_="form-control") }}
+        {{ render_field(form.duration, class_="form-control") }}
+        {{ render_field(form.date, class_="form-control") }}
+        {{ render_field(form.rules, class="textarea", id="editor") }}
+
+        <br>
+        <input type="submit", class="btn btn-success" value="Submit">
+        <input type="submit", name="cancel", class="btn btn-secondary" value="Cancel">
+    </form>
+
+    <script type="text/javascript">
+        ClassicEditor
+            var allEditors = document.querySelectorAll('#editor');
+            for (var i = 0; i < allEditors.length; ++i) {
+                ClassicEditor.create(allEditors[i]);
+            }
+           
+    </script>
 
 {% endblock %}

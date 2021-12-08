@@ -3,26 +3,66 @@
 
 <!-- tells jinja where the content should go into the template -->
 {% block app_content %}
-    <h1>Your Questions</h1>
-    <table class="table">
+
+    {% set delete_message = "Warning deleting a question will result in it's removal from all papers\
+        it currently exists in. This may affect other users. Are you sure you want to proceed?" %}
+
+    <h3>Your Questions</h3>
+    <table 
+        id="table"    
+        class="table table-sm table-hover  " 
+        style="width:100%" 
+    >
         <thead>
             <tr>
-                <th scope="col">Exam Board</th>
+                <th scope="col" >Exam Board</th>
+                <th scope="col" >Exam Level</th>
+                <th scope="col" >Exam Year</th>
+                <th scope="col" >Exam Month</th>
                 <th scope="col">Question body</th>
-                <th scope="col">Marks</th>
+                <th scope="col-0">Tags</th>
+                <th scope="col" >Marks</th>
                 <th scope="col">Answer</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
             </tr>
 
         </thead>
         {% for question in questions %}
             <tr>
                 {% include 'includes/_question.html' %}
-                <td><a href="{{ url_for('main.edit_question', question_id=question.id) }} ">
-                        <input class="btn btn-primary" type="submit" value="Edit Question"></a>
+                <td class="align-middle"><a href="{{ url_for('main.edit_question', question_id=question.id) }} ">
+                    <input class="btn btn-primary" type="submit" value="Edit"></a>
                 </td>
+                <td class="align-middle">
+                    {{ render_modal(question.id, "Delete Question",
+                        delete_message, url_for('main.delete_question', question_id=question.id) ) }}
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#id{{question.id}}">
+                        Delete
+                    </button> 
+                </td>
+
             </tr>
         {% endfor %}
     </table>
-    {% include 'includes/_paginate.html' %}    
-    
+      
+    <script>
+    $(document).ready(function() {
+            $('#table').DataTable( {
+                scrollY: '70vh',
+                scrollCollapse: true,
+                scroller: { rowHeight: 30},
+                "info": false,
+                fixedColumns : {
+                    heightMatch: 'auto'
+                },
+                "columnDefs": [
+                {"visible":false, "targets" : 5},
+                    {"orderable":false, "targets": [8,9] }
+                ]
+            });
+        } );
+    </script>
+
+
 {% endblock %}

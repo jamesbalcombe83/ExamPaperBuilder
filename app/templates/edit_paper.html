@@ -1,33 +1,151 @@
 <!-- makes use of the base template with extends-->
 {% extends "template.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
+{% from "includes/_modals.html" import render_paper_modal %}
 
 {% block app_content %}
-    <div class="container-fluid">
-    <h3>Available questions</h3>
-    <table class="table">     
-        {% for question in questions %}
-            <tr>
-                {% include 'includes/_question.html' %}
-                <td><a href="{{ url_for('main.edit_paper', 
-                    question_id=question.id, paper_id=paper.id) }} ">
-                    <input class="btn btn-primary" type="submit" value="Add to Paper"></a>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
 
-    <h3>Questions in Paper</h3>
-    <table class="table">
-        {% for question in used_qs %}
-            <tr>
-                {% include 'includes/_question.html' %}
-                <td><a href="{{ url_for('main.edit_paper', 
-                    question_id=question.id, paper_id=paper.id) }} ">
-                    <input class="btn btn-primary" type="submit" value="Remove from Paper"></a>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
+    <head>
+        <script>
+            $(function(){
+                $('#paperview tbody').sortable({
+                    update : function (event, ui) {
+                        $(this).children().each(function (index) {
+                            if ($(this).attr('pos') != (index)) {
+                                $(this).attr('pos', (index)).addClass('updated');
+                            }
+                        });
+                        saveNewPositions();
+                    }
+                });
+            });               
+            //gets the postions from above and puts into variables
+            function saveNewPositions() {
+                var paperid = $('#paper_id').data();
+                var oldPos = {{ positions }};
+                $('.updated').each(function () {
+                    id = $(this).attr('pos')
+                    value = $(this).attr('id')
+                    //find the position in the current list, and replace
+                    oldPos[id] = parseInt(value)
+                });
+                //prepare a dictionary
+                var data = {};
+                data =  $('#paper_id').data();
+                data["positions"] = JSON.stringify(oldPos);
+  
+                //send to the route
+                $.ajax({
+                    type: "GET",
+                    contentType: "application/json",
+                    url:"{{ url_for('main.update_positions')}}", 
+                    data : data,
+                }).done(function(){
+                    //positions updated?
+                });
+            }
+
+        </script>
+    </head>
+
+    <meta id="paper_id" data-paper="{{paper.id}}">
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-8" >
+                <h3>Add Questions to {{paper.name}}</h3>
+            </div>     
+            <div class="col">
+                {{ render_paper_modal(paper.id, "Edit Paper", form, 
+                url_for('main.edit_paper', paper_id=paper.id) ) }}
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#id{{paper.id}}">
+                    Edit Paper Details
+                </button>
+            </div>
+            <div class="col"> 
+                <a href="{{ url_for('main.paper_generator', paper_id=paper.id) }} " target="_blank" rel="noopener noreferrer">
+                    <input class="btn btn-success" type="submit" value="Generate Paper"></a>
+            </div>
+        </div>
+
+        <hr>
+        
+        <table 
+            id="table"    
+            class="table"
+            >     
+            <thead>
+                <tr>
+                    <th scope="col" >Exam Board</th>
+                    <th scope="col" >Exam Level</th>
+                    <th scope="col" >Exam Year</th>
+                    <th scope="col" >Exam Month</th>
+                    <th scope="col">Question body</th>
+                    <th scope="col-0">Tags</th>
+                    <th scope="col" >Marks</th>
+                    <th scope="col">Answer</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            {% for question in questions %}
+                <tr>
+                    {% include 'includes/_question.html' %}
+                    <td class="align-middle"><a href="{{ url_for('main.edit_paper', 
+                        question_id=question.id, paper_id=paper.id) }} ">
+                        <input class="btn btn-primary" type="submit" value="Add to Paper"></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    
+
+        
+        <h4>Questions in Paper - Current Total marks - {{paper.total_marks}}</h4>        
+        
+        <table id="paperview" class="table table-sm table-hover">
+            <thead>
+                <th>QNo</th>
+                <th>Body</th>
+                <th>Marks</th>
+                <th></th>
+
+            </thead>
+            <tbody>
+            {% set qno = 1 %}
+            
+            {% for question in used_qs %}
+                {% set index = positions.index(question.id) %}
+                <tr id="{{question.id}}" pos="{{index}}">
+                    <td style="width: 5.0%" class="index">{{loop.index}}</td>
+                    <td style="width: 80.0%" class="align-top">{{ question.body | safe }}</td>
+                    <td style="width: 5.0%" class="align-bottom">[{{ question.marks }}]</td>
+                    <td style="width: 10.0%"class="align-middle"><a href="{{ url_for('main.edit_paper', 
+                        question_id=question.id, paper_id=paper.id) }} ">
+                        <input class="btn btn-danger" type="submit" value="Remove"></a>
+                    </td>
+                </tr>
+                {% set qno = qno + 1 %}
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#table').DataTable( {
+                scrollY: '70vh',
+                scrollCollapse: true,
+                scroller: { rowHeight: 30},
+                "info": false,
+                fixedColumns : {
+                    heightMatch: 'auto'
+                },
+                "columnDefs": [
+                {"visible":false, "targets" : 5},
+                    {"orderable":false, "targets": [8] }
+                ]
+            });
+        } );
+    </script>
+
 {% endblock %}
