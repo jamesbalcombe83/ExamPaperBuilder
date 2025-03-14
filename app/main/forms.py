@@ -2,7 +2,7 @@ from flask import request
 from flask_wtf import FlaskForm
 from wtforms import Field, StringField, PasswordField, BooleanField, SubmitField, \
     SelectField, IntegerField, TextAreaField
-from wtforms.fields.html5 import DateField
+from wtforms.fields import DateField
 from wtforms.validators import ValidationError, InputRequired, Email, EqualTo, Length, NumberRange
 from wtforms.widgets import TextInput
 from app.models import User
