@@ -36,6 +36,13 @@ def create_app(config_class=Config):
 
     #ckeditor.init_app(app)
     db.init_app(app)
+
+    @app.teardown_appcontext
+    def shutdown_session(exception=None):
+        print("Teardown function called!")  # Debug output
+        db.session.remove()
+        print("Database session removed.")
+
     migrate.init_app(app, db)
     login.init_app(app)
     mail.init_app(app)
