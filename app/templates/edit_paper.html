@@ -118,41 +118,43 @@
 
 <!-- Sortable initialization -->
 <script>
-  $(document).ready(function(){
-    $('#paperview tbody').sortable({
-      update : function (event, ui) {
-        $(this).children().each(function (index) {
-          if ($(this).attr('pos') != (index)) {
-            $(this).attr('pos', (index)).addClass('updated');
-          }
-        });
+  $(document).ready(function () {
+    $("#paperview tbody").sortable({
+      update: function (event, ui) {
+        $(this)
+          .children()
+          .each(function (index) {
+            if ($(this).attr("pos") != index) {
+              $(this).attr("pos", index).addClass("updated");
+            }
+          });
         saveNewPositions();
-      }
+      },
     });
   });
 
   //gets the positions from above and puts into variables
   function saveNewPositions() {
-    var paperid = $('#paper_id').data();
-    var oldPos = {{ positions }};
-    $('.updated').each(function () {
-      id = $(this).attr('pos')
-      value = $(this).attr('id')
+    var paperid = $("#paper_id").data();
+    var oldPos = JSON.parse("{{ positions | tojson | safe }}");
+    $(".updated").each(function () {
+      id = $(this).attr("pos");
+      value = $(this).attr("id");
       //find the position in the current list, and replace
-      oldPos[id] = parseInt(value)
+      oldPos[id] = parseInt(value);
     });
     //prepare a dictionary
     var data = {};
-    data = $('#paper_id').data();
+    data = $("#paper_id").data();
     data["positions"] = JSON.stringify(oldPos);
 
     //send to the route
     $.ajax({
       type: "GET",
       contentType: "application/json",
-      url:"{{ url_for('main.update_positions')}}",
-      data : data,
-    }).done(function(){
+      url: "{{ url_for('main.update_positions')}}",
+      data: data,
+    }).done(function () {
       //positions updated?
     });
   }
