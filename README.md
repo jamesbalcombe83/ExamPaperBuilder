@@ -1,4 +1,4 @@
-# ExamPaperBuilder
+sudo # ExamPaperBuilder
 
 ## A tool to help teachers construct examination style papers from a library of questions
 
@@ -20,3 +20,14 @@ View live on [Heroku](https://exampaperbuilder.herokuapp.com/)
 - Image upload
 - Sharing questions between accounts
 - Public database for shared questions
+
+## Instructions
+
+original guide <https://blog.miguelgrinberg.com/>
+
+export FLASK_APP=exampaperbuilder.py
+pip install -r requirements.txt
+flask db init
+flask db migrate -m "all tables"
+flask db upgrade
+flask run
