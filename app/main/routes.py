@@ -94,20 +94,27 @@ def create_paper():
 @bp.route('/view_papers', methods=['GET', 'POST'])
 @login_required
 def view_papers():
-    #for pagination
+    # For pagination
     page = request.args.get('page', 1, type=int)
-    papers = Paper.query.filter(Paper.author == current_user).order_by(Paper.date_created.desc()).paginate(
-        page, current_app.config['QUESTIONS_PER_PAGE'], False)
-    #link for the next set of questions - if there isn't one, its null 
-    next_url = url_for('main.view_papers', page=papers.next_num) \
-        if papers.has_next else None
-    #link for the previous page - if there isn't one, its null    
-    prev_url = url_for('main.view_papers', page=papers.prev_num) \
-        if papers.has_prev else None
+    
+    # Updated pagination syntax for Flask-SQLAlchemy 3.x
+    pagination = Paper.query.filter(Paper.author == current_user).order_by(Paper.date_created.desc()).paginate(
+        page=page, 
+        per_page=current_app.config['QUESTIONS_PER_PAGE'], 
+        error_out=False
+    )
+    
+    # Link for the next set of questions - if there isn't one, it's null
+    next_url = url_for('main.view_papers', page=pagination.next_num) \
+        if pagination.has_next else None
+    
+    # Link for the previous page - if there isn't one, it's null
+    prev_url = url_for('main.view_papers', page=pagination.prev_num) \
+        if pagination.has_prev else None
 
     return render_template('view_papers.html', title='View Papers',
-                           papers=papers.items, next_url=next_url,
-                           prev_url=prev_url)
+                          papers=pagination.items, next_url=next_url,
+                          prev_url=prev_url)
 
 #editing a paper
 @bp.route('/edit_paper', methods=['GET', 'POST'])
@@ -196,23 +203,26 @@ def paper_generator(paper_id):
         positions=positions, paper=paper)
 
 #view all questions - uses the index page but with a different view
-@bp.route("/view_questions", methods=['GET', 'POST'])
+@bp.route('/view_questions', methods=['GET', 'POST'])
 @login_required
 def view_questions():
-    #for pagination
     page = request.args.get('page', 1, type=int)
+    
+    # Updated pagination syntax for Flask-SQLAlchemy 3.x
     questions = Question.query.filter(Question.author==current_user).order_by(Question.timestamp.desc()).paginate(
-        page, current_app.config['QUESTIONS_PER_PAGE'], False)
-    #link for the next set of questions - if there isn't one, its null 
+        page=page, 
+        per_page=current_app.config['QUESTIONS_PER_PAGE'], 
+        error_out=False
+    )
+    
     next_url = url_for('main.view_questions', page=questions.next_num) \
         if questions.has_next else None
-    #link for the previous page - if there isn't one, its null    
     prev_url = url_for('main.view_questions', page=questions.prev_num) \
         if questions.has_prev else None
 
     return render_template('view_questions.html', title='View Questions',
-                           questions=questions.items, next_url=next_url,
-                           prev_url=prev_url)
+                          questions=questions.items, next_url=next_url,
+                          prev_url=prev_url)
 
 #check if tags already exist or not
 def add_tag(tag):

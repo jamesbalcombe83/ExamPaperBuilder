@@ -25,6 +25,12 @@ View live on [Heroku](https://exampaperbuilder.herokuapp.com/)
 
 original guide <https://blog.miguelgrinberg.com/>
 
+# Create a virtual environment
+python3 -m venv venv
+
+# Activate the virtual environment
+source venv/bin/activate
+
 export FLASK_APP=exampaperbuilder.py
 pip install -r requirements.txt
 flask db init
